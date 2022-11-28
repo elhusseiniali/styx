@@ -1,8 +1,8 @@
 import unittest
 import json
 
-from boilerplate.services.users import user_service
-from boilerplate.tests import BaseTestCase, User
+from styx.services.users import user_service
+from styx.tests import BaseTestCase, User
 
 
 class PasswordHashingTests(BaseTestCase):

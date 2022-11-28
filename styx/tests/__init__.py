@@ -1,8 +1,8 @@
 from flask_testing import TestCase
 
-from boilerplate import create_app, db
-from boilerplate.config import TestConfig
-from boilerplate.models import User
+from styx import create_app, db
+from styx.config import TestConfig
+from styx.models import User
 
 
 class BaseTestCase(TestCase):
