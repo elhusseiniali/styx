@@ -3,8 +3,8 @@ import os
 from PIL import Image
 
 from flask_login import current_user
-from boilerplate.tests import BaseTestCase
-from boilerplate.dao.users import user_dao
+from styx.tests import BaseTestCase
+from styx.dao.users import user_dao
 from werkzeug.datastructures import FileStorage
 
 
@@ -339,7 +339,7 @@ class AccountTests(BaseTestCase):
             self.assertTrue(current_user.is_authenticated)
 
             cwd = os.getcwd()
-            path = os.path.join(cwd + "/boilerplate/static/profile_pictures/",
+            path = os.path.join(cwd + "/styx/static/profile_pictures/",
                                       "d5d2195b1e812421.jpg")
 
             image = FileStorage(
@@ -359,7 +359,7 @@ class AccountTests(BaseTestCase):
                                       " updated!", 'success')
 
             fs_image = Image.open(path).thumbnail((125, 125))
-            new_path = os.path.join(cwd + "/boilerplate/static/"
+            new_path = os.path.join(cwd + "/styx/static/"
                                           "profile_pictures/",
                                     current_user.image_file)
             db_image = Image.open(new_path).thumbnail((125, 125))
