@@ -1,4 +1,4 @@
-from boilerplate import create_app
+from styx import create_app
 
 
 if __name__ == '__main__':
