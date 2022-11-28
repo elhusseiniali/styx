@@ -1,9 +1,9 @@
 import unittest
 import pytest
 
-from boilerplate.services.users import UserService, user_service
-from boilerplate.dao.users import UserDAO
-from boilerplate.tests import BaseTestCase, db, User
+from styx.services.users import UserService, user_service
+from styx.dao.users import UserDAO
+from styx.tests import BaseTestCase, db, User
 
 
 class UserServiceTests(BaseTestCase):
