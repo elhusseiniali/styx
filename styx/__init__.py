@@ -20,10 +20,12 @@ login_manager.login_message_category = 'info'
 #   This is because the linter cannot distinguish between imports in a script
 #   and imports in a package. The order of the imports is also important.
 #   These two imports *had* to happen after initializing db.
-from styx.models import User, MuscleGroup, ExerciseType
+from styx.models import User, MuscleGroup, ExerciseType, Video, Exercise
 
 from flask_admin import Admin
-from styx.admin_views import UserView, MuscleGroupView, ExerciseTypeView
+from styx.admin_views import UserView
+from styx.admin_views import MuscleGroupView, ExerciseTypeView, \
+    VideoView, ExerciseView
 
 
 admin = Admin(name='Styx Admin', template_mode='bootstrap3')
@@ -31,6 +33,8 @@ admin = Admin(name='Styx Admin', template_mode='bootstrap3')
 admin.add_view(UserView(User, db.session))
 admin.add_view(MuscleGroupView(MuscleGroup, db.session))
 admin.add_view(ExerciseTypeView(ExerciseType, db.session))
+admin.add_view(VideoView(Video, db.session))
+admin.add_view(ExerciseView(Exercise, db.session))
 
 
 # Image dimensions

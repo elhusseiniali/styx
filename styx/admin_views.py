@@ -24,3 +24,11 @@ class MuscleGroupView(ModelView):
 
 class ExerciseTypeView(ModelView):
     pass
+
+
+class VideoView(ModelView):
+    pass
+
+
+class ExerciseView(ModelView):
+    pass

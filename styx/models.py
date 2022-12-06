@@ -93,13 +93,22 @@ class MuscleGroup(db.Model):
     __tablename__ = "musclegroup"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    name = db.Column(db.String(50), unique=False, nullable=True)
+    name = db.Column(db.String(50), unique=False, nullable=False)
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return (f"MuscleGroup('{self.name}').")
+        return (f"MuscleGroup('{self.name}')")
+
+
+ExerciseAndType = db.Table(
+    "ExerciseAndType", db.metadata,
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('exercise_type_id', db.Integer,
+              db.ForeignKey('exercisetype.id')),
+    db.Column('exercise_id', db.Integer, db.ForeignKey('exercise.id'))
+)
 
 
 class ExerciseType(db.Model):
@@ -116,10 +125,80 @@ class ExerciseType(db.Model):
     __tablename__ = "exercisetype"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    name = db.Column(db.String(50), unique=False, nullable=True)
+    name = db.Column(db.String(50), unique=False, nullable=False)
+
+    exercises = db.relationship("Exercise", secondary=ExerciseAndType,
+                                back_populates="exercise_type")
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return (f"ExerciseType('{self.name}').")
+        return (f"ExerciseType('{self.name}')")
+
+
+ExerciseVideo = db.Table(
+    "ExerciseVideo", db.metadata,
+    db.Column('id', db.Integer, primary_key=True),
+    db.Column('video_id', db.Integer, db.ForeignKey('video.id')),
+    db.Column('exercise_id', db.Integer, db.ForeignKey('exercise.id'))
+)
+
+
+class Video(db.Model):
+    """[Videp]
+    Table that stores instructional videos for different exercises.
+
+    Parameters
+    ----------
+    url : [str]
+        URL to the video.
+    """
+    __tablename__ = "video"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    url = db.Column(db.String(50), unique=False, nullable=False)
+
+    exercise = db.relationship("Exercise", secondary=ExerciseVideo,
+                               back_populates="videos")
+
+    def __init__(self, url):
+        self.url = url
+
+    def __repr__(self):
+        return f"Video(URL: {self.url})"
+
+
+class Exercise(db.Model):
+    """[Exercise]
+    Parameters
+    ----------
+    name: [string]
+        Exercise name.
+
+    Relationships
+    -------------
+    exercise_type: [ExerciseType]
+        Many to many
+    videos: [Video]
+        Many to many
+        -   The reason behind this is that some exercises are
+            similar enough for the videos to be overlapping (e.g.
+            Lateral Raises and Full ROM Lateral Raises)
+    """
+    __tablename__ = "exercise"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    name = db.Column(db.String(50), unique=False, nullable=False)
+
+    exercise_type = db.relationship("ExerciseType", secondary=ExerciseAndType,
+                                    back_populates="exercises")
+
+    videos = db.relationship("Video", secondary=ExerciseVideo,
+                             back_populates="exercise")
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return (f"Exercise('{self.name}')")
