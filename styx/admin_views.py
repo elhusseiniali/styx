@@ -16,3 +16,11 @@ class UserView(ModelView):
     column_editable_list = ('username', 'email')
     column_searchable_list = ('username', 'email')
     column_type_formatters = MY_DEFAULT_FORMATTERS
+
+
+class MuscleGroupView(ModelView):
+    pass
+
+
+class ExerciseTypeView(ModelView):
+    pass

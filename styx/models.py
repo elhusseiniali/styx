@@ -77,3 +77,49 @@ class User(db.Model, UserMixin):
                       check_deliverability=True,
                       throw_exception=True,
                       message="The e-mail is invalid.")
+
+
+class MuscleGroup(db.Model):
+    """[MuscleGroup]
+    Parameters
+    ----------
+    name: [string]
+        Name of muscle group.
+
+    Relationships
+    -------------
+    exercise: [Exercise]
+    """
+    __tablename__ = "musclegroup"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    name = db.Column(db.String(50), unique=False, nullable=True)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return (f"MuscleGroup('{self.name}').")
+
+
+class ExerciseType(db.Model):
+    """[ExerciseType]
+    Parameters
+    ----------
+    name: [string]
+        Type of the exercise (compound, isolation, push, pull).
+
+    Relationships
+    -------------
+    exercise: [Exercise]
+    """
+    __tablename__ = "exercisetype"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    name = db.Column(db.String(50), unique=False, nullable=True)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return (f"ExerciseType('{self.name}').")
