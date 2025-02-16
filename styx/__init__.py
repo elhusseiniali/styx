@@ -1,67 +1,93 @@
 from flask import Flask
 
-from flask_sqlalchemy import SQLAlchemy
+from config import Config, DevConfig
 
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
-
-from styx.config import BaseConfig
+from .extensions import bcrypt, db, migrate
 
 
-db = SQLAlchemy()
-bcrypt = Bcrypt()
+def create_app(config_class: type[Config] = DevConfig) -> Flask:
+    """Application factory that creates and configures the Flask app.
 
-login_manager = LoginManager()
-login_manager.login_view = 'users.login'
-login_manager.login_message_category = 'info'
+    Configuration includes:
+    - Setting flask application config. variables from config file.
+    - Initializing extensions from file (to avoid circular imports
+    for cleaner code).
+    - CLI command registration.
 
+    Returns:
+        Flask: The configured Flask application instance
 
-#   Below import is necessary, even if the linter complains about it.
-#   This is because the linter cannot distinguish between imports in a script
-#   and imports in a package. The order of the imports is also important.
-#   These two imports *had* to happen after initializing db.
-from styx.models import User, MuscleGroup, ExerciseType, Video, Exercise
+    """
+    app: Flask = Flask(__name__)
 
-from flask_admin import Admin
-from styx.admin_views import UserView
-from styx.admin_views import MuscleGroupView, ExerciseTypeView, \
-    VideoView, ExerciseView
-
-
-admin = Admin(name='Styx Admin', template_mode='bootstrap3')
-# Add administrative views here
-admin.add_view(UserView(User, db.session))
-admin.add_view(MuscleGroupView(MuscleGroup, db.session))
-admin.add_view(ExerciseTypeView(ExerciseType, db.session))
-admin.add_view(VideoView(Video, db.session))
-admin.add_view(ExerciseView(Exercise, db.session))
-
-
-# Image dimensions
-MAX_HEIGHT = 400
-MAX_WIDTH = 400
-
-
-def create_app(config_class=BaseConfig):
-    app = Flask(__name__)
+    # Configuraion
     app.config.from_object(config_class)
 
-    db.init_app(app)
-    bcrypt.init_app(app)
-    login_manager.init_app(app)
-    admin.init_app(app)
+    # Initialize extensions
+    register_extensions(app)
 
-    from styx.core.users.views import users
-    from styx.core.main.routes import main
+    # TODO: ADD BLUEPRINT REGISTRATIONS !!!
 
-    from styx.core.errors.handlers import errors
-
-    from styx.core import blueprint as api
-    app.register_blueprint(api, url_prefix='/api/1')
-
-    app.register_blueprint(main)
-    app.register_blueprint(errors)
-
-    app.register_blueprint(users)
-
+    register_commands(app)
+    
     return app
+
+def register_extensions(app: Flask) -> None:
+    """Register extensions with the Flask application.
+
+    Extensions Registered:
+    - SQLAlchemy: Database ORM
+    - Flask-Migrate: Database migration tool
+    - Flask-Bcrypt: Password hashing
+
+    Args:
+        app (Flask): Flask application instance
+
+    """
+    db.init_app(app)
+    migrate.init_app(app, db)
+    bcrypt.init_app(app)
+
+def register_commands(app: Flask) -> None:
+    """Register custom CLI commands with the Flask application.
+
+    Commands Registered:
+    - create-db: Creates all database tables
+    - delete-db: Drops all database tables
+
+    Args:
+        app (Flask): Flask application instance
+
+    """
+
+    @app.cli.command("create-db")
+    def create_db() -> None:
+        """Create all tables defined in SQLAlchemy models.
+
+        Usage:
+            $ flask create-db
+
+        Effects:
+            - Creates all tables defined in SQLAlchemy models
+            - Prints confirmation message
+            - Database exists only until application stops
+        """
+        with app.app_context():
+            db.create_all()
+            print("Database tables created!")
+
+    @app.cli.command("delete-db")
+    def delete_db() -> None:
+        """Drop all tables defined in SQLAlchemy models.
+
+        Usage:
+            $ flask delete-db 
+
+        Effects:
+            - Drops all tables defined in SQLAlchemy models
+            - Prints confirmation message
+            - Irreversible operation - all data will be lost immediately
+        """
+        with app.app_context():
+            db.drop_all()
+            print("Database tables deleted!")
