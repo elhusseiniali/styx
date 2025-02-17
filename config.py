@@ -1,7 +1,7 @@
 """Flask application configuration settings.
 
 This module defines configuration classes for different environments
-(development, testing, production). It handles environment variables
+(development, and  testing). It handles environment variables
 and sets default values for Flask application settings.
 """
 from os import environ, path
