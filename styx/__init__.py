@@ -7,16 +7,15 @@ from .extensions import bcrypt, db, migrate  # type: ignore
 
 def create_app(config_class: type[Config] = DevConfig) -> Flask:
     """Application factory that creates and configures the Flask app.
-
-    Configuration includes:
-    - Setting flask application config. variables from config file.
-    - Initializing extensions from file (to avoid circular imports
-    for cleaner code).
-    - CLI command registration.
+    
+    Args:
+        config_class (type[Config], optional): Selects a type of 
+        configuration defined in confing.py (e.g. TestConfig, DevConfig...).
+        Defaults to DevConfig.
 
     Returns:
         Flask: The configured Flask application instance
-
+        
     """
     app: Flask = Flask(__name__)
 
@@ -35,13 +34,11 @@ def create_app(config_class: type[Config] = DevConfig) -> Flask:
 def register_extensions(app: Flask) -> None:
     """Register extensions with the Flask application.
 
-    Extensions Registered:
-    - SQLAlchemy: Database ORM
-    - Flask-Migrate: Database migration tool
-    - Flask-Bcrypt: Password hashing
+    Extensions registered: SQLAlchemy, Flask-Migrate, and
+    Flask-Bcrypt.
 
     Args:
-        app (Flask): Flask application instance
+        app (Flask): Flask application instance.
 
     """
     db.init_app(app)
@@ -49,16 +46,7 @@ def register_extensions(app: Flask) -> None:
     bcrypt.init_app(app)
 
 def register_commands(app: Flask) -> None:
-    """Register custom CLI commands with the Flask application.
-
-    Commands Registered:
-    - create-db: Creates all database tables
-    - delete-db: Drops all database tables
-
-    Args:
-        app (Flask): Flask application instance
-
-    """
+    """Register custom CLI commands with the Flask application."""
 
     @app.cli.command("create-db")
     def create_db() -> None:
