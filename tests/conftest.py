@@ -8,7 +8,7 @@ from styx import create_app, db
 @pytest.fixture()
 def app():
     # Set the Testing configuration prior to creating the Flask application
-    environ['CONFIG_TYPE'] = 'config.TestConfig'
+    environ["CONFIG_TYPE"] = "config.TestConfig"
     app = create_app()
 
     return app
