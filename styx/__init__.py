@@ -10,7 +10,7 @@ def create_app(config_class: type[Config] = DevConfig) -> Flask:
     
     Args:
         config_class (type[Config], optional): Selects a type of 
-        configuration defined in confing.py (e.g. TestConfig, DevConfig...).
+        configuration defined in config.py (e.g. TestConfig, DevConfig...).
         Defaults to DevConfig.
 
     Returns:
