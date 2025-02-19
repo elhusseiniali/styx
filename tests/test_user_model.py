@@ -1,13 +1,15 @@
-"""Tests for User model functionalities.
+"""Tests User model functionalities.
 
-This file contains pytest tests to verify core functionalities of 
-the User model, including user creation, data initialization, password
-hashing uniqueness, UUID generation, data modification tracking 
-(`updated_on` field), and user deletion.
+Pytest tests to verify core functionalities of 
+the User model including: user creation, data initialization, password
+hashing uniqueness, UUID generation, timestamp updates, 
+user deletion, and the representation string correctness.
 
-The tests ensure the User model behaves as expected in terms of 
-data integrity, security, and lifecycle management within the 
-application's database context.
+Note: The test functions (excluding pytest fixtures) docstring 
+should follow the GIVEN-WHEN-THEN structure:
+- GIVEN: what are the initial conditions for the test?
+- WHEN: what is occurring that needs to be tested?
+- THEN: what is the expected response?
 """
 import time
 
@@ -16,12 +18,6 @@ import pytest
 from styx import db
 from styx.models.user_model import User
 
-"""
-    Test comments should follow the GIVEN-WHEN-THEN structure:
-        > GIVEN - what are the initial conditions for the test?
-        > WHEN - what is occurring that needs to be tested?
-        > THEN - what is the expected response?
-"""
 
 @pytest.fixture
 def sample_users(init_database):
@@ -41,9 +37,6 @@ def sample_users(init_database):
 
 def test_user_creation(init_database, sample_users):
     """Verify user data initialization on creation.
-
-    Ensures that upon creating a new `User`, `username`, `email`, 
-    and `password` are correctly initialized.
 
     Given: A database with sample users, including 'user1'.
     When:  A user is retrieved from the database by username 'user1'.
@@ -88,8 +81,6 @@ def test_password_hash_uniqueness(init_database):
 def test_uuid_uniqueness(sample_users):
     """Verify unique UUIDs for different users.
 
-    Ensures that distinct users are assigned unique UUIDs as IDs.
-
     Given: Two sample users.
     When:  Two sample users are created and their IDs are accessed.
     Then:  Their IDs (UUIDs) are different.
@@ -99,9 +90,6 @@ def test_uuid_uniqueness(sample_users):
 
 def test_updated_on_field(init_database, sample_users):
     """Verify `updated_on` field updates when user data changes.
-
-    Ensures that modifying and persisting any user attribute
-    automatically updates the `updated_on` field.
 
     Given: A User instance from the database.
     When:  A user attribute (e.g., `email`) is updated and committed.
@@ -126,9 +114,6 @@ def test_updated_on_field(init_database, sample_users):
 def test_user_repr(sample_users):
     """Verify the __repr__ method of the User model.
 
-    Ensures that the __repr__ method returns a string in the format:
-    "User(username={username}, email={email})" representing the User object.
-
     Given: A sample User object.
     When:  The repr() function is called on the User object.
     Then:  A string representation matching the expected format is returned,
@@ -140,8 +125,6 @@ def test_user_repr(sample_users):
 
 def test_user_deletion(init_database, sample_users):
     """Verify user deletion functionality.
-
-    Ensures that users can be successfully deleted from the database.
 
     Given: Two sample users in the database.
     When:  Both users are deleted from the database and changes are committed.
