@@ -143,5 +143,4 @@ dmypy.json
 cython_debug/
 
 # Ruff
-ruff.toml
 .ruff_cache

@@ -2,7 +2,7 @@ from flask import Flask
 
 from config import Config, DevConfig
 
-from .extensions import bcrypt, db, migrate
+from .extensions import bcrypt, db, migrate  # type: ignore
 
 
 def create_app(config_class: type[Config] = DevConfig) -> Flask:
