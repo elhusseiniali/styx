@@ -50,6 +50,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #  GitHub token (automatically provided)
           COVERALLS_FLAG_NAME: ${{ matrix.python-version }} # optional - flag runs by Python version
           COVERALLS_PARALLEL: true # Important for matrix builds
+          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }} #  Unique run ID
 
     - name: Coveralls Finished  # This step is needed for parallel builds
       if: always()  # Always run, even if previous steps fail
@@ -57,3 +58,4 @@ jobs:
         coveralls --service=github --finish
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }} #  Unique run ID - MUST MATCH
