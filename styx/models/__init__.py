@@ -9,7 +9,8 @@ from ..extensions import db
 
 class BaseModel(db.Model): # type: ignore
     """Base model class that can be used by all models."""
-    
+
+    __abstract__ = True
     # Common columns that should be in all models
     
     # Use UUID instead of sequential ids for security issues that may arise
