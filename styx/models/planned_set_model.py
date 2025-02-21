@@ -28,7 +28,6 @@ class PlannedSet(BaseModel):
     # Note: defining validators in the database layer (using CheckConstraint), 
     # and in the application layer (@validates decorator) is a bit redundant, 
     # but for now it is fine.
-    
     __table_args__ = (
         CheckConstraint("min_rep_range > 0", name="check_min_rep_positive"),
         CheckConstraint("max_rep_range > 0", name="check_max_rep_positive"),
