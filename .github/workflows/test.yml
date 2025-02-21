@@ -34,7 +34,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install coveralls  # Install the coveralls package
+        pip install coveralls
 
     - name: Lint with Ruff
       run: |
@@ -43,19 +43,21 @@ jobs:
 
     - name: Test with Pytest and Coverage (Coveralls)
       run: |
-        python -m pytest --cov=styx --cov-report=xml  # Generate XML report for Coveralls
-        coveralls --service=github # report results to coveralls
-
-      env:  
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #  GitHub token (automatically provided)
-          COVERALLS_FLAG_NAME: ${{ matrix.python-version }} # optional - flag runs by Python version
-          COVERALLS_PARALLEL: true # Important for matrix builds
-          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }} #  Unique run ID
-
-    - name: Coveralls Finished  # This step is needed for parallel builds
-      if: always()  # Always run, even if previous steps fail
-      run: |
-        coveralls --service=github --finish
+        python -m pytest --cov=styx --cov-report=xml
+        coveralls --service=github
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
+        COVERALLS_PARALLEL: true
+        COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+
+  finish:  # Separate job for the finish step
+    needs: build  #  This is the KEY!  Waits for the 'build' job (all matrix variations)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        run: |
+          coveralls --service=github --finish
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }} #  Unique run ID - MUST MATCH
+          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }} # Consistent ID
