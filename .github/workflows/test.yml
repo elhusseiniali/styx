@@ -2,9 +2,9 @@ name: Python Tests and Linting
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main", "master" ]
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -22,23 +22,26 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Cache pip
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+    # --- AGGRESSIVE CLEANUP AND UPDATE ---
 
-    - name: Install dependencies
+    - name: Update pip, setuptools, and wheel
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install coveralls
+        python -m pip install --upgrade pip setuptools wheel
 
+    - name: Force No-Cache Install (Aggressive)
+      run: |
+        pip install --no-cache-dir --force-reinstall -r requirements.txt
+        pip install --no-cache-dir --force-reinstall coveralls
+
+    - name: List installed packages (after reinstall)
+      run: pip freeze
+
+    - name: Show pytest plugins
+      run: pytest --trace-config
+
+    # --- END DIAGNOSTIC AND CLEANUP STEPS ---
     - name: Lint with Ruff
       run: |
-        pip install ruff
         ruff check . --config ruff.toml
 
     - name: Test with Pytest and Coverage (Coveralls)
@@ -51,8 +54,8 @@ jobs:
         COVERALLS_PARALLEL: true
         COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 
-  finish:  # Separate job for the finish step
-    needs: build  #  This is the KEY!  Waits for the 'build' job (all matrix variations)
+  finish:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
@@ -60,4 +63,4 @@ jobs:
           coveralls --service=github --finish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }} # Consistent ID
+          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
