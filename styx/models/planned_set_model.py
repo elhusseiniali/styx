@@ -1,7 +1,12 @@
 from uuid import UUID
 
 from sqlalchemy import CheckConstraint, ForeignKey, Integer
-from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship,
+    validates,
+)
 
 from . import BaseModel
 from .set_type_model import SetType
@@ -37,15 +42,18 @@ class PlannedSet(BaseModel):
     def validate_min_rep_range(self, key, range):
         if (range < 0):
             raise ValueError("minimum range can't be negative.")
+        if self.max_rep_range is not None and range > self.max_rep_range:
+            raise ValueError("minimum range can't be " + \
+                             "greater than maximum range.")
+
         return range
 
     @validates("max_rep_range")
     def validate_max_rep_range(self, key, range):
         if (range < 0):
             raise ValueError("maximum range can't be negative.")
-        if hasattr(self, "min_rep_range") and range < self.min_rep_range:
+        if self.min_rep_range is not None and range < self.min_rep_range:
             raise ValueError("maximum range can't be less than minimum range.")
-        return range
 
         return range
     
