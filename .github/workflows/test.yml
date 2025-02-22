@@ -49,6 +49,14 @@ jobs:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
 
+    - name: Create .env file for testing
+      run: |
+        echo "SECRET_KEY=${SECRET_KEY}" > .env
+        echo "SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}" >> .env
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
+
     - name: Test with Pytest and Coverage (Coveralls)
       run: |
         python -m pytest --cov=styx --cov-report=xml
