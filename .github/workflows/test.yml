@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Cache pip
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -34,24 +34,27 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install "coverage[toml]>=7.4.0" "pytest-cov>=4.1.0" coveralls
+        pip install "coverage[toml]>=7.4.0" "pytest-cov>=4.1.0"
 
     - name: Lint with Ruff
       run: |
-        pip install ruff
+        pip install --no-cache-dir ruff
         ruff check . --config ruff.toml
 
     - name: Test with Pytest and Coverage (Coveralls)
       run: |
         python -m pytest --cov=styx --cov-report=xml
+        pip install --no-cache-dir coveralls
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
         COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
         COVERALLS_PARALLEL: true
         COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 
-  finish:  # Separate job for the finish step
+  finish:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -60,4 +63,4 @@ jobs:
           coveralls --service=github --finish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }} # Consistent ID
+          COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
