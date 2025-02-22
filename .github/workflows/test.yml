@@ -44,18 +44,14 @@ jobs:
     - name: Check secrets
       run: |
         if [[ -z "${SECRET_KEY}" ]]; then echo "SECRET_KEY is NOT accessible"; else echo "SECRET_KEY is accessible"; fi
-        if [[ -z "${SQLALCHEMY_DATABASE_URI}" ]]; then echo "SQLALCHEMY_DATABASE_URI is NOT accessible"; else echo "SQLALCHEMY_DATABASE_URI is accessible"; fi
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
 
     - name: Create .env file for testing
       run: |
         echo "SECRET_KEY=${SECRET_KEY}" > .env
-        echo "SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}" >> .env
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
 
     - name: Test with Pytest and Coverage (Coveralls)
       run: |
@@ -65,7 +61,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
         COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
         COVERALLS_PARALLEL: true
         COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
