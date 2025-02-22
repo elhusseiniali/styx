@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: styx-testing
     strategy:
       fail-fast: false
       matrix:
@@ -57,6 +58,7 @@ jobs:
   finish:
     needs: build
     runs-on: ubuntu-latest
+    environment: styx-testing  # Add environment reference
     steps:
       - name: Coveralls Finished
         run: |
