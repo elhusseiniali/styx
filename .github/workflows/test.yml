@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: styx-testing
     strategy:
       fail-fast: false
       matrix:
@@ -42,6 +41,14 @@ jobs:
         pip install --no-cache-dir ruff
         ruff check . --config ruff.toml
 
+    - name: Check secrets
+      run: |
+        if [[ -z "${SECRET_KEY}" ]]; then echo "SECRET_KEY is NOT accessible"; else echo "SECRET_KEY is accessible"; fi
+        if [[ -z "${SQLALCHEMY_DATABASE_URI}" ]]; then echo "SQLALCHEMY_DATABASE_URI is NOT accessible"; else echo "SQLALCHEMY_DATABASE_URI is accessible"; fi
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        SQLALCHEMY_DATABASE_URI: ${{ secrets.SQLALCHEMY_DATABASE_URI }}
+
     - name: Test with Pytest and Coverage (Coveralls)
       run: |
         python -m pytest --cov=styx --cov-report=xml
@@ -58,7 +65,6 @@ jobs:
   finish:
     needs: build
     runs-on: ubuntu-latest
-    environment: styx-testing  # Add environment reference
     steps:
       - name: Coveralls Finished
         run: |
