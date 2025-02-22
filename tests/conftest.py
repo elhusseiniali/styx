@@ -1,4 +1,5 @@
 import pytest
+
 from config import TestConfig
 from styx import create_app, db
 
