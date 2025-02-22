@@ -1,15 +1,12 @@
-from os import environ
-
 import pytest
-
+from config import TestConfig
 from styx import create_app, db
 
 
 @pytest.fixture()
 def app():
     # Set the Testing configuration prior to creating the Flask application
-    environ["CONFIG_TYPE"] = "config.TestConfig"
-    app = create_app()
+    app = create_app(TestConfig)
 
     return app
 
