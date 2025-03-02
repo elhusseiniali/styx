@@ -1,0 +1,29 @@
+# config.example.toml
+# This is the default configuration template.
+# Copy the contents of this file to config.toml 
+# and update the values as needed. Don't forget 
+# to add a secret key.
+
+[core]
+# secret_key = "INSERT_YOUR_KEY_HERE"
+static_folder = "static"
+templates_folder = "templates"
+
+[security]
+wtf_csrf_enabled = true
+
+[development]
+flask_env = "development"
+debug = true
+testing = false
+database_uri = "sqlite:///dev.db"
+templates_auto_reload = true
+propagate_exceptions = true
+
+[testing]
+flask_env = "development"
+debug = true
+testing = true
+database_uri = "sqlite:///:memory:"
+wtf_csrf_enabled = false
+propagate_exceptions = true
