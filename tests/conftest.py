@@ -1,13 +1,13 @@
 import pytest
 
-from config import TestConfig
+from config import TestingConfig
 from styx import create_app, db
 
 
 @pytest.fixture()
 def app():
     # Set the Testing configuration prior to creating the Flask application
-    app = create_app(TestConfig)
+    app = create_app(TestingConfig)
 
     return app
 
