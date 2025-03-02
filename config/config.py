@@ -10,7 +10,7 @@ class Config:
     """Base configuration class containing common settings."""
 
     def __init__(self, 
-                 config_data: dict[str, Any] | None = None, 
+                 config_data = None, 
                  filename: str = "config.toml") -> None:
 
         if config_data is None:
