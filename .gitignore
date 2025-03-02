@@ -145,3 +145,13 @@ cython_debug/
 
 # Ruff
 .ruff_cache
+
+# ignore ALL TOML files by default
+*.toml
+
+# whitelist specific safe files
+!ruff.toml
+!config.example.toml
+
+# Ignore instance folder (if using Flask's instance path)
+/instance/
