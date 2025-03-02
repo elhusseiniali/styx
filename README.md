@@ -27,12 +27,12 @@ python run.py
 ## Database Management
 
 The following commands are available for database management:
-- `create-db`: Create the tables defined in models module.
+- `create-db`: Create the tables defined in models package.
     ```bash
     flask --app=run.py create-db
     ```
 
-- `delete-db`: Drop the tables defined in models module.
+- `delete-db`: Drop the tables defined in models package.
     ```bash
     flask --app=run.py delete-db
     ```
