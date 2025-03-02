@@ -17,19 +17,23 @@ def create_app(config_class: type[Config] = DevConfig) -> Flask:
         Flask: The configured Flask application instance
         
     """
+    # Initialize core Flask application
     app: Flask = Flask(__name__)
 
-    # Configuraion
-    app.config.from_object(config_class)
+    # Apply configuration
+    app_config: Config = config_class()
+    app.config.from_object(app_config)
 
-    # Initialize extensions
+    # Set up extensions
     register_extensions(app)
 
-    # TODO: ADD BLUEPRINT REGISTRATIONS !!!
+    # TODO: ADD BLUEPRINT REGISTRATIONS
 
+    # Add CLI commands
     register_commands(app)
-    
+
     return app
+
 
 def register_extensions(app: Flask) -> None:
     """Register extensions with the Flask application.
@@ -44,6 +48,7 @@ def register_extensions(app: Flask) -> None:
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
+
 
 def register_commands(app: Flask) -> None:
     """Register custom CLI commands with the Flask application."""
