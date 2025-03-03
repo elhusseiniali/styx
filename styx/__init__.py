@@ -14,8 +14,8 @@ def create_app(config_class: type[Config] = DevConfig,
         configuration defined in config.py (e.g. TestConfig, DevConfig...).
         Defaults to DevConfig.
 
-        filename (str, optional): Selects a TOML file (should be inside config
-        package) to take configuration from. Defaults to "config.toml".
+        filename (str, optional): Selects a TOML file to take 
+        configuration data from. Default to None.
 
     Returns:
         Flask: The configured Flask application instance
