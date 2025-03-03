@@ -8,27 +8,23 @@ from .config_loader import ConfigLoader
 
 class Config:
     """Base configuration class containing common settings."""
-
-    def __init__(self, 
-                 config_data = None, 
-                 filename: str = "config.toml") -> None:
-
-        if config_data is None:
-            loader: ConfigLoader = ConfigLoader()
-            self.config_data = loader.load(filename)
-        else:
-            self.config_data = config_data
+    
+    def __init__(self, filename: str | None = None) -> None:
+        loader: ConfigLoader = ConfigLoader(filename)
+        self.config_data = loader.load()
+        
+        self.SECTION = "core"
         
         # Core Flask settings
-        self.SECRET_KEY: str = self.getValue("core",
+        self.SECRET_KEY: str = self.getValue(self.SECTION,
                                               "secret_key",
                                               secrets.token_urlsafe(40))
 
-        self.STATIC_FOLDER: str = self.getValue("core", 
+        self.STATIC_FOLDER: str = self.getValue(self.SECTION,
                                                  "static_folder",
                                                  "static")
         
-        self.TEMPLATES_FOLDER: str = self.getValue("core",
+        self.TEMPLATES_FOLDER: str = self.getValue(self.SECTION,
                                          "templates_folder",
                                          "templates")
 

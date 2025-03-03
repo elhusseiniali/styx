@@ -5,13 +5,17 @@ from config import Config, DevConfig
 from .extensions import bcrypt, db, migrate  # type: ignore
 
 
-def create_app(config_class: type[Config] = DevConfig) -> Flask:
+def create_app(config_class: type[Config] = DevConfig,
+               filename: str | None = None) -> Flask:
     """Application factory that creates and configures the Flask app.
     
     Args:
         config_class (type[Config], optional): Selects a type of 
         configuration defined in config.py (e.g. TestConfig, DevConfig...).
         Defaults to DevConfig.
+
+        filename (str, optional): Selects a TOML file (should be inside config
+        package) to take configuration from. Defaults to "config.toml".
 
     Returns:
         Flask: The configured Flask application instance
@@ -21,7 +25,7 @@ def create_app(config_class: type[Config] = DevConfig) -> Flask:
     app: Flask = Flask(__name__)
 
     # Apply configuration
-    app_config: Config = config_class()
+    app_config: Config = config_class(filename=filename)
     app.config.from_object(app_config)
 
     # Set up extensions

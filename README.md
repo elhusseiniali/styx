@@ -6,10 +6,9 @@ Styx is meant to be a Flask app where users can log their workouts. The feature 
 
 # Setup Guide
 
-1. Copy the contents of config.example.toml to config.toml inside the config package and follow the instructions (only needed for customization):
+1. Copy the contents of config.example.toml to config.toml in the main directory (it doesn't matter much because it looks for config.toml or given filename anywhere in the project) and follow the instructions (only needed for customization):
     ```bash
-    cd config
-    cp default_config.toml config.toml
+    cp config.example.toml config.toml
     ```
 
 2. Install project dependencies with:

@@ -7,25 +7,28 @@ class TestingConfig(Config):
     Inherits from base Config class and configures settings for test runs.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, filename: str | None = None) -> None:
 
-        self.FLASK_ENV: str = self.getValue("testing",
+        super().__init__(filename=filename)
+
+        self.SECTION = "testing"
+
+        self.FLASK_ENV: str = self.getValue(self.SECTION,
                                             "flask_env",
                                             "development")
 
-        self.DEBUG: bool = self.getValue("testing", "debug", True)
+        self.DEBUG: bool = self.getValue(self.SECTION, "debug", True)
 
-        self.TESTING: bool = self.getValue("testing", "testing", True)
+        self.TESTING: bool = self.getValue(self.SECTION, "testing", True)
 
-        self.SQLALCHEMY_DATABASE_URI: str = self.getValue("testing",
+        self.SQLALCHEMY_DATABASE_URI: str = self.getValue(self.SECTION,
                                                       "database_uri",
                                                       "sqlite:///:memory:")
 
-        self.WTF_CSRF_ENABLED: bool = self.getValue("testing",
+        self.WTF_CSRF_ENABLED: bool = self.getValue(self.SECTION,
                                                "wtf_csrf_enabled",
                                                False)
 
-        self.PROPAGATE_EXCEPTIONS: bool = self.getValue("testing",
+        self.PROPAGATE_EXCEPTIONS: bool = self.getValue(self.SECTION,
                                                         "propagate_exceptions",
                                                         True)

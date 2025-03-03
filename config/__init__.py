@@ -4,6 +4,9 @@ This package defines configuration classes for different environments
 (development, and  testing). It handles environment variables
 and sets default values for Flask application settings.
 
+IMPORTANT: "config.toml" is the default config we look for in the
+entire project.
+
 The hierarchy of where to choose variables are:
     1. Environment variables.
     2. config.toml (user set config. file).
