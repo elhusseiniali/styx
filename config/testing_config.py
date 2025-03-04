@@ -1,4 +1,5 @@
 from .config import Config
+from .utils import get_config_value
 
 
 class TestingConfig(Config):
@@ -13,22 +14,32 @@ class TestingConfig(Config):
 
         self.SECTION = "testing"
 
-        self.FLASK_ENV: str = self.getValue(self.SECTION,
-                                            "flask_env",
-                                            "development")
+        self.FLASK_ENV: str = get_config_value(self.SECTION,
+                                               "flask_env",
+                                               self.config_data,
+                                               "development")
 
-        self.DEBUG: bool = self.getValue(self.SECTION, "debug", True)
+        self.DEBUG: bool = get_config_value(self.SECTION,
+                                            "debug",
+                                            self.config_data,
+                                            True)
 
-        self.TESTING: bool = self.getValue(self.SECTION, "testing", True)
+        self.TESTING: bool = get_config_value(self.SECTION,
+                                              "testing",
+                                              self.config_data,
+                                              True)
 
-        self.SQLALCHEMY_DATABASE_URI: str = self.getValue(self.SECTION,
-                                                      "database_uri",
-                                                      "sqlite:///:memory:")
+        self.SQLALCHEMY_DATABASE_URI: str = get_config_value(self.SECTION,
+                                                             "database_uri",
+                                                             self.config_data,
+                                                             "sqlite:///:memory:")
 
-        self.WTF_CSRF_ENABLED: bool = self.getValue(self.SECTION,
-                                               "wtf_csrf_enabled",
-                                               False)
+        self.WTF_CSRF_ENABLED: bool = get_config_value(self.SECTION,
+                                                       "wtf_csrf_enabled",
+                                                       self.config_data,
+                                                       False)
 
-        self.PROPAGATE_EXCEPTIONS: bool = self.getValue(self.SECTION,
-                                                        "propagate_exceptions",
-                                                        True)
+        self.PROPAGATE_EXCEPTIONS: bool = get_config_value(self.SECTION,
+                                                           "propagate_exceptions",
+                                                           self.config_data,
+                                                           True)

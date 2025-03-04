@@ -2,6 +2,8 @@ from pathlib import Path
 from typing import Any
 from warnings import warn
 
+from .utils import find_config_file
+
 try:
     import tomllib
 except ImportError:
@@ -22,26 +24,10 @@ class ConfigLoader:
         self.filename = filename if filename is not None else "config.toml"
         self.BASE_DIR = Path(__file__).resolve().parent.parent
 
-    def _find_config_file(self) -> Path | None:
-        """Recursively search for the config file in the project directory.
-
-        Returns:
-            Path | None: the path to the file or none if it couldn't find it.
-
-        """
-        if self.filename is None:
-            return None
-
-        # Search through all directories and files
-        for path in self.BASE_DIR.rglob(self.filename):
-            # Return the first matching file
-            return path
-        
-        return None
-
     def load(self) -> dict[str, Any]:
         """Load a toml file."""
-        config_path: Path | None = self._find_config_file()
+        config_path: (Path | None) = find_config_file(base_dir=self.BASE_DIR,
+                                                      filename=self.filename)
 
         if config_path is None:
             warn(f"Configuration file '{self.filename}'"
