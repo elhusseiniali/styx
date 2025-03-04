@@ -35,8 +35,6 @@ class Exercise(BaseModel):
 
 
     def __repr__(self) -> str:
-        return f"Exercise( \
-                            name={self.name}, \
-                            types={self.exercise_types}, \
-                            muscle_groups={self.muscle_groups} \
-                         )"
+        return (f"Exercise(name={self.name}, "
+                f"types={self.exercise_types}, "
+                f"muscle_groups={self.muscle_groups})")
