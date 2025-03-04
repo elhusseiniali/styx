@@ -1,8 +1,7 @@
 import pytest
 
 from styx import db
-from styx.models.planned_set_model import PlannedSet
-from styx.models.set_type_model import SetType
+from styx.models import PlannedSet, SetType
 
 
 @pytest.fixture

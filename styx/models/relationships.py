@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Table
 
-from . import BaseModel
+from .base import BaseModel
 
 # Association Table for many to many relationship
 # between Exercise and Exercise type
