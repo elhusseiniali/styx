@@ -1,4 +1,5 @@
 from .config import Config
+from .utils import get_config_value
 
 
 class DevConfig(Config):
@@ -12,22 +13,33 @@ class DevConfig(Config):
         super().__init__(filename=filename)
 
         self.SECTION = "development"
-        
-        self.FLASK_ENV: str = self.getValue(self.SECTION, "flask_env",
-                                            "development")
-                                  
-        self.DEBUG: bool = self.getValue(self.SECTION, "debug", True)
 
-        self.TESTING: bool = self.getValue(self.SECTION, "testing", False)
+        self.FLASK_ENV: str = get_config_value(self.SECTION,
+                                               "flask_env",
+                                               self.config_data,
+                                               "development")
 
-        self.SQLALCHEMY_DATABASE_URI: str = self.getValue(self.SECTION, 
-                                                           "database_uri",
-                                                           "sqlite:///dev.db")
+        self.DEBUG: bool = get_config_value(self.SECTION,
+                                            "debug",
+                                            self.config_data,
+                                            True)
 
-        self.TEMPLATES_AUTO_RELOAD: bool = self.getValue(self.SECTION, 
-                                                          "templates_auto_reload",
-                                                          True)
+        self.TESTING: bool = get_config_value(self.SECTION,
+                                              "testing",
+                                              self.config_data,
+                                              False)
 
-        self.PROPAGATE_EXCEPTIONS: bool = self.getValue(self.SECTION,
-                                                        "propagate_exceptions",
-                                                        True)
+        self.SQLALCHEMY_DATABASE_URI: str = get_config_value(self.SECTION, 
+                                                             "database_uri",
+                                                             self.config_data,
+                                                             "sqlite:///dev.db")
+
+        self.TEMPLATES_AUTO_RELOAD: bool = get_config_value(self.SECTION,
+                                                            "templates_auto_reload",
+                                                            self.config_data,
+                                                            True)
+
+        self.PROPAGATE_EXCEPTIONS: bool = get_config_value(self.SECTION,
+                                                           "propagate_exceptions",
+                                                           self.config_data,
+                                                           True)
