@@ -1,7 +1,7 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from . import BaseModel
+from ..base import BaseModel
 
 
 class SetType(BaseModel):

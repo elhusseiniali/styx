@@ -1,9 +1,14 @@
-from sqlalchemy import List, Optional, String
+from typing import TYPE_CHECKING
+
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from . import BaseModel
-from .exercise_model import Exercise
-from .relationships import muscle_group_association_table
+from ..base import BaseModel
+from ..relationships import muscle_group_association_table
+from .exercise import Exercise
+
+if TYPE_CHECKING:
+    from .exercise import Exercise
 
 
 class MuscleGroup(BaseModel):
@@ -12,7 +17,7 @@ class MuscleGroup(BaseModel):
     name: Mapped[str] = mapped_column(String(120), unique=True)
 
     # many to many field with Exercise table
-    exercises: Mapped[Optional[List[Exercise]]] = relationship(
+    exercises: Mapped[list["Exercise"] | None] = relationship(
         "Exercise",
         secondary=muscle_group_association_table,
         back_populates="muscle_groups",

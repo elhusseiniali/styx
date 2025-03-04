@@ -1,13 +1,17 @@
-from sqlalchemy import List, String
+from typing import TYPE_CHECKING
+
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from . import BaseModel
-from .exercise_type_model import ExerciseType
-from .muscle_group_model import MuscleGroup
-from .relationships import (
+from ..base import BaseModel
+from ..relationships import (
     exercise_type_association_table,
     muscle_group_association_table,
 )
+
+if TYPE_CHECKING:
+    from .exercise_type import ExerciseType
+    from .muscle_group import MuscleGroup
 
 
 class Exercise(BaseModel): 
@@ -16,14 +20,14 @@ class Exercise(BaseModel):
     name: Mapped[str] = mapped_column(String(120), unique=True)
 
     # many to many relationship with Exercise Type table
-    exercise_types: Mapped[List["ExerciseType"]] = relationship(
+    exercise_types: Mapped[list["ExerciseType"]] = relationship(
         "ExerciseType",
         secondary=exercise_type_association_table,
         back_populates="exercises",
     )
 
     # many to many relationship with Muscle Group table
-    muscle_groups: Mapped[List["MuscleGroup"]] = relationship(
+    muscle_groups: Mapped[list["MuscleGroup"]] = relationship(
         "MuscleGroup",
         secondary=muscle_group_association_table,
         back_populates="exercises",
@@ -31,8 +35,6 @@ class Exercise(BaseModel):
 
 
     def __repr__(self) -> str:
-        return f"Exercise( \
-                            name={self.name}, \
-                            types={self.exercise_types}, \
-                            muscle_groups={self.muscle_groups} \
-                         )"
+        return (f"Exercise(name={self.name}, "
+                f"types={self.exercise_types}, "
+                f"muscle_groups={self.muscle_groups})")

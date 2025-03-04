@@ -2,8 +2,8 @@ from sqlalchemy import String
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column
 
-from ..extensions import bcrypt
-from . import BaseModel
+from styx.extensions import bcrypt
+from styx.models.base import BaseModel
 
 
 class User(BaseModel): #type: ignore

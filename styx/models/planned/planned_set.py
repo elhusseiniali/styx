@@ -8,8 +8,9 @@ from sqlalchemy.orm import (
     validates,
 )
 
-from . import BaseModel
-from .set_type_model import SetType
+from styx.models.core.set_type import SetType
+
+from ..base import BaseModel
 
 
 class PlannedSet(BaseModel):

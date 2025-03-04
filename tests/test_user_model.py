@@ -16,7 +16,7 @@ import time
 import pytest
 
 from styx import db
-from styx.models.user_model import User
+from styx.models import User
 
 
 @pytest.fixture
