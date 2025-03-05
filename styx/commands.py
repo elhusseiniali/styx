@@ -8,10 +8,7 @@ db_cli = AppGroup("db", help="Database management commands")
 
 @db_cli.command("create")
 def create_db():
-    """Create all database tables.
-
-    Creates all tables defined in models package.
-    """
+    """Create all database tables."""
     db.create_all()
     print("Database tables created!")
 
