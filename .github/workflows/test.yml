@@ -70,8 +70,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
-        run: |
-          coveralls --service=github --finish
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
